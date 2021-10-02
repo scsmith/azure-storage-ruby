@@ -24,7 +24,6 @@
 # THE SOFTWARE.
 #--------------------------------------------------------------------------
 
-require "ipaddr"
 require "azure/storage/common/core/error"
 
 if RUBY_VERSION.to_f < 2.0
@@ -207,49 +206,6 @@ class String
   }.each do |key, value|
     define_method key do
       "\e[#{value}m" + self + "\e[0m"
-    end
-  end
-end
-
-# Code validate private/public IP acceptable ranges.
-class IPAddr
-  def private?
-    return false unless self.ipv4?
-    PRIVATE_RANGES.each do |ipr|
-      return true if ipr.include?(self)
-    end
-    false
-  end
-
-  def public?
-    !private?
-  end
-
-  class << self
-    def validate_ip_and_prefix(ip, cidr)
-      if cidr.to_s.empty?
-        raise "Cidr is missing for IP '#{ip}'."
-      elsif valid?(ip)
-        raise "Ip address '#{ip}' is invalid."
-      elsif !IPAddr.new(ip).private?
-        raise "Ip Address #{ip} must be private."
-      end
-    end
-
-    def validate_address_space(ip)
-      if ip.split("/").size != 2
-        raise "Cidr is invalid for IP #{ip}."
-      elsif valid?(ip)
-        raise "Address space '#{ip}' is invalid."
-      end
-    end
-
-    def address_prefix(ip, cidr)
-      ip + "/" + cidr.to_s
-    end
-
-    def valid?(ip)
-      (IPAddr.new(ip) rescue nil).nil?
     end
   end
 end

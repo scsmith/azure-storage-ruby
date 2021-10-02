@@ -30,7 +30,7 @@ source "https://rubygems.org" do
   if RUBY_VERSION.start_with?("2.3") then
     gem "nokogiri",            "~> 1.10.4", :require => false
   else
-    gem "nokogiri",            "~> 1.11.0.rc2", :require => false
+    gem "nokogiri",            "~> 1.12", ">= 1.12.5", :require => false
   end
 
   gem "adal",                "~> 1.0", :require => false
